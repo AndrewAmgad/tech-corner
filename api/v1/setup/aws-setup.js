@@ -55,7 +55,7 @@ const uploadImages = multer({
     fileFilter: (req, file, cb) => {
         checkFileType(file, cb);
     }
-}).array('itemImage', 4) // Maximum 4 images per post  
+}).array('itemImages', 4) // Maximum 4 images per post  
 
 module.exports = { setup, uploadImages };
 
