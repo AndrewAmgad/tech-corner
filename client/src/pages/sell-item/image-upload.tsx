@@ -69,6 +69,8 @@ function Upload({sendDataToParent, errors} : any) {
 
             <br />
 
+            
+            {/* Selected Images Preview */}
             <Grid
                 container
                 direction="row"
@@ -83,10 +85,6 @@ function Upload({sendDataToParent, errors} : any) {
                 ))}
 
             </Grid>
-
-            {/* Selected Images Preview */}
-
-
         </>
     )
 }

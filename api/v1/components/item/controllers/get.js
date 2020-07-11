@@ -11,9 +11,12 @@ module.exports.getAll = (req, res) => {
     const pageLimit = req.query.page_limit
 
     Item.findAndPaginate({}, pageNumber, pageLimit).then(response => {
+
+        // Remove items that do not contain images from the response
         response.items.map((item, index) => {
             if(item.images.length === 0) response.items.splice(index, 1);
-        })
+        });
+
         res.status(200).json(response);
     }).catch(err => {
         console.log(err)

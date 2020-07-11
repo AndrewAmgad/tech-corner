@@ -9,7 +9,7 @@ import { displaySnackBar } from '../../redux/actions/notifications';
 
 // Page Components
 import Inputs from './inputs';
-import { createItem, uploadImages } from '../../redux/actions/items';
+import { createItem, uploadImages, fetchItems } from '../../redux/actions/items';
 import Upload from './image-upload';
 import useStyles from './styles/styles';
 
@@ -26,6 +26,7 @@ interface Props extends RouteComponentProps {
     displaySnackBar: (open: boolean, content: string, severity: string) => void,
     createItem: (body: any, cb: any) => void,
     uploadImages: (itemId: string, body: any, cb: any) => void,
+    fetchItems: () => void,
     authError: object,
     response: object,
     error: object,
@@ -40,7 +41,7 @@ function SellItemPage(props: Props) {
     const [loading, setLoading] = useState<boolean>(false);
     const classes = useStyles();
 
-    const { authError, history, displaySnackBar, response, error, checkAuthLoading, createItem, uploadImages } = props
+    const { authError, history, displaySnackBar, response, error, checkAuthLoading, createItem, uploadImages, fetchItems } = props
 
     // Redirect to sign in page if user is not authenticated
     useEffect(() => {
@@ -67,6 +68,7 @@ function SellItemPage(props: Props) {
         let errorsObject = {};
         let error: boolean = false;
 
+        // Error handling
         if (category === 'none') { errorsObject = { ...errorsObject, category: "Please select a category" }; error = true }
         else { errorsObject = { ...errorsObject, category: null }; error = false }
 
@@ -81,10 +83,10 @@ function SellItemPage(props: Props) {
 
         // POST Action
         createItem(payload, (response: any, error: any) => {
+            
             displaySnackBar(true, 'Post is currently processing...', 'info');
             setLoading(false)
-            console.log(error);
-            console.log(response);
+    
             if (error) return setErrors(error.reason);
 
             let formData = new FormData();
@@ -92,10 +94,15 @@ function SellItemPage(props: Props) {
                 formData.append('itemImages', image, image.name);
             });
 
+            // Start image upload once the item is created
             uploadImages(response._id, formData, () => {
+
+                // Display success snackbar & refetch the homepage posts once the images are uploaded
                 displaySnackBar(true, 'Your post is now active', 'success');
+                fetchItems();
             });
 
+            // Redirect to the home page
             history.push('/');
         })
     }
@@ -148,6 +155,10 @@ const mapDispatchToProps = (dispatch: Dispatch<any>) => {
 
         uploadImages: (itemId: string, body: any, cb: () => void) => {
             dispatch(uploadImages(itemId, body, cb))
+        },
+
+        fetchItems: () => {
+            dispatch(fetchItems())
         }
     }
 }

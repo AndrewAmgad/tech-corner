@@ -9,32 +9,35 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import placeholder from '../images/placeholder-image.png'
+import placeholder from '../../images/placeholder-image.png'
 
 // Component Styles
-import itemStyles from './styles/item-styles';
-import { formatTime } from '../helpers';
+import itemStyles from '../styles/item-styles';
+import { formatTime } from '../../helpers';
+import Item from '../../types/Item';
+
+interface Props {
+    item: Item,
+    onClick: () => void
+}
 
 
-export default function Item({item}: any) {
+export default function ItemCard({item, onClick}: Props) {
     const classes = itemStyles();
 
     const time = formatTime(item.time);
 
     return (
         <Card className={classes.root} >
-            <CardActionArea>
+            <CardActionArea onClick={onClick}>
                 <CardMedia
                     className={classes.media}
-                    // IMAGE PLACEHOLDER
                     image={item.images[0] ? process.env.REACT_APP_AWS_URL + "/" + item.images[0] : placeholder}
-                    title="Contemplative Reptile"
                 />
                 <CardContent>
                     <Typography gutterBottom variant="h6" component="h2" style={{height: 32, overflow: 'hidden'}}>
                         {item.title}
                     </Typography>
-
 
                     {/* Row Grid */}
                     <Grid style={{marginBottom: 12}} container direction="row"  justify="space-between" alignItems="flex-start">
