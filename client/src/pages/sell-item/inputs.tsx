@@ -1,6 +1,6 @@
-import React, { useEffect, useState, SyntheticEvent, useRef } from 'react';
+import React, {useState, SyntheticEvent, useRef } from 'react';
 import Styles from './styles/styles';
-import { Grid, TextField, CircularProgress, Button } from '@material-ui/core';
+import { Grid, CircularProgress, Button } from '@material-ui/core';
 import Input from '../../components/InputComponent';
 import { categoriesList } from '../home/categories';
 
@@ -43,7 +43,7 @@ function Inputs(props: any) {
         <form className={classes.form} noValidate onSubmit={(e) => onSubmit(e)}>
 
             <Grid item xs={12}>
-                <Input name="Title" inputRef={titleInput} onChange={onInputChange} />
+                <Input name="Title" inputRef={titleInput} onChange={onInputChange} error={props.errors.title} />
             </Grid>
             <br />
 
@@ -54,6 +54,7 @@ function Inputs(props: any) {
                     onChange={() => onInputChange()}
                     multiline={true}
                     rows={12}
+                    error={props.errors.details} 
                 />
             </Grid>
 
@@ -76,7 +77,7 @@ function Inputs(props: any) {
                 />
             </Grid>
 
-            <Button disabled={!button} type="submit" fullWidth variant="contained" color="primary" onClick={() => onInputChange()}
+            <Button disabled={!button ? !button : props.loading} type="submit" fullWidth variant="contained" color="primary" onClick={() => onInputChange()}
                 className={classes.submit}>
                 {props.loading ? <CircularProgress size={26} /> : "Submit"}
             </Button>

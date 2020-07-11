@@ -21,7 +21,7 @@ function SnackBar({ open, content, severity, displaySnackBar }: any) {
             <Snackbar
                 anchorOrigin={{
                     vertical: 'top',
-                    horizontal: 'center',
+                    horizontal: 'right',
                 }}
                 open={open}
                 autoHideDuration={6000}

@@ -9,6 +9,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
+import placeholder from '../images/placeholder-image.png'
 
 // Component Styles
 import itemStyles from './styles/item-styles';
@@ -26,11 +27,11 @@ export default function Item({item}: any) {
                 <CardMedia
                     className={classes.media}
                     // IMAGE PLACEHOLDER
-                    image="https://cdn.vox-cdn.com/thumbor/RAk1KMKMj-ys9Fl1JeI7OAyHLVk=/0x0:2040x1360/1200x800/filters:focal(889x498:1215x824)/cdn.vox-cdn.com/uploads/chorus_image/image/66272445/vpavic_191118_3800_0122.0.jpg"
+                    image={item.images[0] ? process.env.REACT_APP_AWS_URL + "/" + item.images[0] : placeholder}
                     title="Contemplative Reptile"
                 />
                 <CardContent>
-                    <Typography gutterBottom variant="h6" component="h2">
+                    <Typography gutterBottom variant="h6" component="h2" style={{height: 32, overflow: 'hidden'}}>
                         {item.title}
                     </Typography>
 

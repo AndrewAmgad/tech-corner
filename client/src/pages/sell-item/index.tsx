@@ -9,7 +9,7 @@ import { displaySnackBar } from '../../redux/actions/notifications';
 
 // Page Components
 import Inputs from './inputs';
-import { createItem } from '../../redux/actions/items';
+import { createItem, uploadImages } from '../../redux/actions/items';
 import Upload from './image-upload';
 import useStyles from './styles/styles';
 
@@ -24,7 +24,8 @@ const PageMetaTags = () => (
 
 interface Props extends RouteComponentProps {
     displaySnackBar: (open: boolean, content: string, severity: string) => void,
-    createItem: (body: any) => void,
+    createItem: (body: any, cb: any) => void,
+    uploadImages: (itemId: string, body: any, cb: any) => void,
     authError: object,
     response: object,
     error: object,
@@ -36,9 +37,10 @@ function SellItemPage(props: Props) {
     const [inputs, setInputs] = useState<any>();
     const [images, setImages] = useState<any>();
     const [errors, setErrors] = useState({});
+    const [loading, setLoading] = useState<boolean>(false);
     const classes = useStyles();
 
-    const { authError, history, displaySnackBar, response, error, checkAuthLoading, createItem } = props
+    const { authError, history, displaySnackBar, response, error, checkAuthLoading, createItem, uploadImages } = props
 
     // Redirect to sign in page if user is not authenticated
     useEffect(() => {
@@ -56,34 +58,47 @@ function SellItemPage(props: Props) {
     // Get images from the Upload component
     const getImageData = (imageData: any) => {
         setImages(imageData);
-        setErrors({...errors, images: null})
+        setErrors({ ...errors, images: null })
     }
 
     // Submit data to the API
     const onSubmit = () => {
         const { title, details, price, category } = inputs;
         let errorsObject = {};
+        let error: boolean = false;
 
-        if (category === 'none')  errorsObject = { ...errorsObject, category: "Please select a category" };
-        else errorsObject = {...errorsObject, category: null}
+        if (category === 'none') { errorsObject = { ...errorsObject, category: "Please select a category" }; error = true }
+        else { errorsObject = { ...errorsObject, category: null }; error = false }
 
-        if (!images) errorsObject = {...errorsObject, images: "Selected at least 1 image"};
-        else errorsObject = {...errorsObject, images: null}
+        if (!images) { errorsObject = { ...errorsObject, images: "Please select at least 1 image" }; error = true }
+        else { errorsObject = { ...errorsObject, images: null }; error = false }
 
-        console.log(errorsObject)
-
-        if(errorsObject) return setErrors(errorsObject);
+        if (error) return setErrors(errorsObject);
         else setErrors({});
 
-        // POST Action
-        createItem({ title, details, price, category })
-    }
+        const payload = { title, details, price, category };
+        setLoading(true);
 
-    // Handle HTTP responses
-    useEffect(() => {
-        console.log(response);
-        console.log(error);
-    }, [response, error]);
+        // POST Action
+        createItem(payload, (response: any, error: any) => {
+            displaySnackBar(true, 'Post is currently processing...', 'info');
+            setLoading(false)
+            console.log(error);
+            console.log(response);
+            if (error) return setErrors(error.reason);
+
+            let formData = new FormData();
+            Array.from(images).forEach((image: any) => {
+                formData.append('itemImages', image, image.name);
+            });
+
+            uploadImages(response._id, formData, () => {
+                displaySnackBar(true, 'Your post is now active', 'success');
+            });
+
+            history.push('/');
+        })
+    }
 
     // Return loading progress bar if check auth is loading
     if (checkAuthLoading) {
@@ -95,11 +110,12 @@ function SellItemPage(props: Props) {
     return (
         <Container component='main'>
             <PageMetaTags />
+            {loading && <LinearProgress />}
             <div className={classes.paper}>
                 <Typography component="h1" variant="h4" className={classes.title}>Add a new item</Typography>
                 <Upload sendDataToParent={getImageData} errors={errors} />
                 <Container component='main' maxWidth='xs'>
-                    <Inputs onSubmit={onSubmit} sendDataToParent={getInputData} errors={errors} />
+                    <Inputs onSubmit={onSubmit} sendDataToParent={getInputData} errors={errors} loading={loading} />
                 </Container>
 
             </div>
@@ -126,8 +142,12 @@ const mapDispatchToProps = (dispatch: Dispatch<any>) => {
             dispatch(displaySnackBar(open, content, severity))
         },
 
-        createItem: (body: any) => {
-            dispatch(createItem(body))
+        createItem: (body: any, cb: (response: any, error: any) => void) => {
+            dispatch(createItem(body, cb))
+        },
+
+        uploadImages: (itemId: string, body: any, cb: () => void) => {
+            dispatch(uploadImages(itemId, body, cb))
         }
     }
 }

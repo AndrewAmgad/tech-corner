@@ -1,4 +1,4 @@
-import React, { useEffect, useState, SyntheticEvent } from 'react';
+import React, { useState, SyntheticEvent } from 'react';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
 
 import {
@@ -29,8 +29,16 @@ function Upload({sendDataToParent, errors} : any) {
 
     const onInputChange = (e: SyntheticEvent) => {
         const { files } = e.target as any;
+        let error = true;
 
-        if (files[4]) return setError("Cannot upload more than 4 images");
+        Array.from(files).forEach((file: any) => {
+            console.log(file.size)
+            if(file.size > 2000000) return error = true;
+            else error = false;
+        });
+        
+        if (error) return setError('Maximum size allowed is 2 MB per file');
+        else if (files[4]) return setError("Cannot upload more than 4 images");
         else setError(null);
 
         let urls: any[] = [];
@@ -70,7 +78,7 @@ function Upload({sendDataToParent, errors} : any) {
 
                 {images.map((image: any, index: number) => (
                     <Grid item key={index}>
-                        <img className={classes.image} src={image} />
+                        <img className={classes.image} src={image} alt='uploaded' />
                     </Grid>
                 ))}
 

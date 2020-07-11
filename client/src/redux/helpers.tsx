@@ -49,7 +49,9 @@ export const httpRequest = (reqMethod: string, url: string, query?: any, headers
          * Add Content-Type value to the headers object
          */
         if (!headers) headers = {}
-        headers['Content-Type'] = 'application/json';
+        if(headers['Content-Type'] === 'multipart/form-data') {
+            delete headers['Content-Type']
+        } else if(!headers['Content-Type']) headers['Content-Type'] = 'application/json';
 
         /**
          * Set the request options
@@ -63,8 +65,11 @@ export const httpRequest = (reqMethod: string, url: string, query?: any, headers
         /**
          * Check if payload data was provided through the function arguments and add it through the req body
          */
-        if (payload) options.body = JSON.stringify(payload)
-
+        console.log(headers);
+        if (payload) {
+            if(payload instanceof FormData) options.body = payload;
+            else options.body = JSON.stringify(payload)
+        }
 
         fetch(finalUrl.toString(), options)
             .then(async (response) => {

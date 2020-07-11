@@ -19,7 +19,7 @@ module.exports.createItem = async function createItem(req, res) {
     let error = false;
 
     // Input validation
-    if(title.length < 15) {error = true, errors.title = "Title is too short"};
+    if(title.length < 10) {error = true, errors.title = "Title is too short"};
     if(details.length < 50) {error = true, errors.details = "Content is too short"};
     if(!category) {error = true, errors.category = "Category is required"};
     if(!price) {error = true, errors.price = "Price is missing"};
@@ -60,7 +60,6 @@ module.exports.createItem = async function createItem(req, res) {
 module.exports.uploadItemImages = async function uploadItemImages(req, res) {
     const userId = req.userId;
     const itemId = req.params.item_id;
-
     
     const item = await Item.findById(itemId);
 
@@ -70,7 +69,8 @@ module.exports.uploadItemImages = async function uploadItemImages(req, res) {
 
     // Upload the received images
     uploadImages(req, res, error => {
-        if (error) return errorResponse(res, 500, error);
+
+        if (error) return errorResponse(res, 500, error.message);
         if (req.files === undefined) return errorResponse(res, 400, 'No files received');
 
         let filesArray = req.files

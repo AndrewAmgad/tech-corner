@@ -24,7 +24,6 @@ import InfoIcon from '@material-ui/icons/InfoOutlined'
 import SigninIcon from '@material-ui/icons/MeetingRoomOutlined'
 import AddIcon from '@material-ui/icons/Add'
 import RegisterIcon from '@material-ui/icons/ExitToApp';
-import MenuIcon from '@material-ui/icons/Menu';
 import { useTheme } from '@material-ui/core/styles';
 
 // App Logo
@@ -75,9 +74,9 @@ function NavDrawer(props: NavDrawerProps) {
 
   // Items visible at the top of the drawer at all times
   const mainItems = [
-    { name: "Home", icon: HomeIcon, onClick: () => props.history.push('/'), path: '/' },
+    { name: "Home", icon: HomeIcon, onClick: () => history.push('/'), path: '/' },
     { name: "Products", icon: ProductIcon, path: '/products' },
-    { name: "Sell an Item", icon: AddIcon, onClick: () => props.history.push('/sell'), path: '/sell' },
+    { name: "Sell an Item", icon: AddIcon, onClick: () => history.push('/sell'), path: '/sell' },
     { name: "Info", icon: InfoIcon, path: '/info' }
   ];
 

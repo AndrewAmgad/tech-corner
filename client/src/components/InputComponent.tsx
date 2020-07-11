@@ -2,7 +2,7 @@ import React from 'react';
 import MaterialUiPhone from 'material-ui-phone-number';
 import TextField from '@material-ui/core/TextField';
 import Styles from './styles/input-styles';
-import { Select, MenuItem } from '@material-ui/core';
+import { MenuItem } from '@material-ui/core';
 
 /**
  * Input Component  

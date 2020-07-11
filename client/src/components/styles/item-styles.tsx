@@ -8,7 +8,7 @@ const itemStyles = makeStyles(theme => ({
     root: {
         width: 355,
         borderRadius: 12,
-        height: 328,
+        height: 380,
         flexGrow: 1,
         marginTop: 16,
         marginRight: 'auto',
@@ -17,7 +17,7 @@ const itemStyles = makeStyles(theme => ({
         backgroundColor: theme.palette.background.default
     },
     media: {
-        height: 140,
+        height: 200,
     },
     
     divider: {
