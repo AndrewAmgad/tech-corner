@@ -1,4 +1,4 @@
-import User from "./user"
+import User from './User'
 
 type Item = {
     _id: string,

@@ -36,7 +36,7 @@ interface Modal {
     title?: string
 };
 
-export default function AddDepartmentModal(props: Modal) {
+export default function ModalComponent(props: Modal) {
     const classes = useStyles();
 
     const [open, setOpen] = React.useState(props.open);
