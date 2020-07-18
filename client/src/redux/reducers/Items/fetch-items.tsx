@@ -29,6 +29,13 @@ export default function fetchItemsReducer(state = initialState, action: any) {
                 response: {}
             }
 
+        case "CLEAR_ITEMS":
+            return {
+                ...state,
+                loading: false,
+                response: {}
+            }
+
         default:
             return state;
     }

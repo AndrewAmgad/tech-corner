@@ -9,7 +9,6 @@ interface Props {
 }
 
 const ItemModal = ({ open, handleClose, item }: Props) => {
-    console.log(item);
     return (
         <Modal
             open={open}

@@ -8,14 +8,24 @@ const errorResponse = require('../../../helper-functions').errorResponse;
  */
 module.exports.getAll = (req, res) => {
     const pageNumber = req.query.page;
-    const pageLimit = req.query.page_limit
+    const pageLimit = req.query.page_limit;
+    const category = req.query.category;
 
-    Item.findAndPaginate({}, pageNumber, pageLimit).then(response => {
+    // Filter response with category ID if one is provided
+    let query = {}
+    if(category) query = {category: category}
+    
+    Item.findAndPaginate(query, pageNumber, pageLimit).then(response => {
 
         // Remove items that do not contain images from the response
+        let date = new Date().getTime();
+
+        // Remove items which have been submitted but their images are still uploading
         response.items.map((item, index) => {
-            if(item.images.length === 0) response.items.splice(index, 1);
-        });
+            if(date - item.time < 120000  && item.images.length < 1){
+                response.items.splice(index, 1);
+            } 
+        })
 
         res.status(200).json(response);
     }).catch(err => {

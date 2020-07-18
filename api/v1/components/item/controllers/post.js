@@ -1,6 +1,9 @@
+// Database Models
 const Item = require('../model');
-const errorResponse = require('../../../helper-functions').errorResponse;
 const User = require('../../user/model');
+const Category = require('../../category/model');
+
+const errorResponse = require('../../../helper-functions').errorResponse;
 const uploadImages = require('../../../setup/aws-setup').uploadImages;
 const mongoose = require('mongoose');
 
@@ -20,7 +23,7 @@ module.exports.createItem = async function createItem(req, res) {
 
     // Input validation
     if(title.length < 10) {error = true, errors.title = "Title is too short"};
-    if(details.length < 50) {error = true, errors.details = "Content is too short"};
+    if(!details || details.length < 50) {error = true, errors.details = "Content is too short"};
     if(!category) {error = true, errors.category = "Category is required"};
     if(!price) {error = true, errors.price = "Price is missing"};
 
@@ -28,7 +31,7 @@ module.exports.createItem = async function createItem(req, res) {
 
     const user = await User.findById(userId).catch(err => (errorResponse(res, 500, err.message)));
 
-    // save product to the database
+    // Save product to the database
     const item = new Item({
         images: [],
         seller: userId,
@@ -41,13 +44,15 @@ module.exports.createItem = async function createItem(req, res) {
     });
 
     // Save the item to the database
-    item.save().then(item => {
+    item.save().then( async (item) => {
         var response = item.toObject();
+
         response.seller = {
             id: user._id,
             name: user.firstName + " " + user.lastName,
             phone: user.phone
-        }
+        };
+
         res.status(200).json(response);
     });
 };
@@ -57,6 +62,7 @@ module.exports.createItem = async function createItem(req, res) {
  * Purpose: Upload item images and add their URLS to the item's database object
  * Endpoint uses form-data to receive the image files
  */
+
 module.exports.uploadItemImages = async function uploadItemImages(req, res) {
     const userId = req.userId;
     const itemId = req.params.item_id;

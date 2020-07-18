@@ -24,14 +24,15 @@ module.exports = (ItemSchema) => {
                 .limit(page !== 0 ? pageLimit : null)
                 .sort({"_id": -1})
                 .populate("seller")
+                .populate("category")
                 .lean().then(async items => {
 
                     // Get the total amount of documents in the items collection
-                    const count = await Item.countDocuments({});
+                    const count = await Item.countDocuments(query);
 
                     // Check if there are more posts in the next page
                     const hasMore = (pageLimit * page) < count && (page !== 0) ? true : false;
-
+             
                     items.map(item => {
                         const seller = {
                             id: item.seller._id,

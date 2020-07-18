@@ -1,15 +1,16 @@
-import React, { useEffect, Dispatch } from 'react';
-import {Container, LinearProgress} from '@material-ui/core'
+import React, { useEffect, Dispatch, useState } from 'react';
+import { Container, LinearProgress } from '@material-ui/core'
 import { withRouter, RouteComponentProps } from 'react-router';
 import { connect } from 'react-redux';
-import { fetchItems } from '../../redux/actions/items';
+import { fetchItems, getCategories, clearItems } from '../../redux/actions/items';
 import HomeStyles from './styles/home';
 import MetaTags from 'react-meta-tags';
 
 // Home Page Sections
 import SearchBar from '../../components/SearchBar'
-import {Categories} from './categories'
+import { Categories } from './categories'
 import RecentItems from './recent-items';
+import Category from '../../types/Category';
 
 const PageMetaTags = () => (
     <MetaTags>
@@ -20,25 +21,78 @@ const PageMetaTags = () => (
 )
 
 interface HomeProps extends RouteComponentProps {
-    response: Array<any>,
+    response: any,
     loading: boolean,
     error: object,
-    fetchItems: () => void
+    categoriesResponse: Array<Category>
+    categoiresError: object,
+    categoriesLoading: boolean,
+    fetchItems: (page?: number, cb?: () => void) => void,
+    getCategories: () => void,
+    clearItems: () => void
 }
 
 
 function Home(props: HomeProps) {
     const classes = HomeStyles();
+    const [paginatedItems, setPaginatedItems] = useState<any>(undefined);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [bottomReached, setBottomReached] = useState<boolean>(false);
+
+
+    // Scrolling event handler for infinite pagination
+    const handleScroll = () => {
+        const windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
+        const body = document.body;
+        const html = document.documentElement;
+        const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+        const windowBottom = windowHeight + window.pageYOffset;
+        if (windowBottom + 1000 >= docHeight) {
+            setBottomReached(true);
+        } else {
+            setBottomReached(false)
+        }
+    }
 
     useEffect(() => {
-        props.fetchItems()
-    }, [])
+        props.fetchItems(1)
+        props.getCategories();
 
-    if(props.loading){
-        return (
-            <LinearProgress />
-        )
+        window.addEventListener('scroll', handleScroll)
+
+        // Clean up event listener to avoid memory leaks
+        return function cleanup() {
+            props.clearItems()
+            window.removeEventListener("scroll", handleScroll);
+            setPaginatedItems(undefined)
+        }
+    }, []);
+
+    // Fetch more items once the bottom is reached
+    useEffect(() => {
+        if (props.response.has_more) {
+            if (bottomReached) {
+                console.log('called')
+                fetchMore()
+            }
+        }
+    }, [bottomReached])
+
+    const fetchMore = () => {
+        props.fetchItems(props.response.page + 1)
     }
+
+    // Append the additional items to the page when fetched
+    useEffect(() => {
+        if (paginatedItems !== undefined) {
+            if (!paginatedItems.includes(props.response.items)) {
+                setPaginatedItems([...paginatedItems, ...props.response.items])
+            }
+        } else paginatedItems === undefined && setPaginatedItems(props.response.items)
+    }, [props.response]);
+
+
+    if (!props.response.items || props.categoriesLoading) return <LinearProgress />
 
     return (
         <>
@@ -46,8 +100,8 @@ function Home(props: HomeProps) {
             <div className={classes.container}>
                 <Container className={classes.container} maxWidth='lg'>
                     <SearchBar />
-                    <Categories />
-                    <RecentItems response={props.response} />
+                    <Categories categories={props.categoriesResponse} />
+                    <RecentItems items={paginatedItems} />
                 </Container>
             </div>
         </>
@@ -56,19 +110,32 @@ function Home(props: HomeProps) {
 
 // Map the Redux reducer's state to the component's props
 const mapStateToProps = (state: any) => {
-    const {response, loading, error} = state.fetchItemsReducer;
+    const { response, loading, error } = state.fetchItemsReducer;
+    const { response: categoriesResponse, loading: categoriesLoading, error: categoriesError } = state.categoriesReducer;
+
     return {
-        response: response,
-        loading: loading,
-        error: error,
+        response,
+        loading,
+        error,
+        categoriesResponse,
+        categoriesLoading,
+        categoriesError
     };
 };
 
 // Map the Redux actions to the component's props
 const mapDispatchToProps = (dispatch: Dispatch<any>) => {
     return {
-        fetchItems: () => {
-            dispatch(fetchItems());
+        fetchItems: (page?: number, cb?: () => void) => {
+            dispatch(fetchItems(page, cb));
+        },
+
+        clearItems: () => {
+            dispatch(clearItems())
+        },
+
+        getCategories: () => {
+            dispatch(getCategories());
         }
     };
 };

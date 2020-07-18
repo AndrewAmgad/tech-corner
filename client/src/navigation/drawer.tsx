@@ -128,7 +128,7 @@ function NavDrawer(props: NavDrawerProps) {
       <CssBaseline />
       <nav className={classes.drawer} aria-label="mailbox folders">
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-        <Hidden smUp implementation="css">
+        <Hidden mdDown implementation="css">
           <Drawer
             container={container}
             variant="temporary"
@@ -145,7 +145,7 @@ function NavDrawer(props: NavDrawerProps) {
             {list(true)}
           </Drawer>
         </Hidden>
-        <Hidden xsDown implementation="css">
+        <Hidden smDown implementation="css">
           <Drawer
             classes={{ paper: classes.permanentDrawer }}
             variant="permanent"

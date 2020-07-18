@@ -3,15 +3,12 @@ import { connect } from 'react-redux';
 import { withRouter, RouteComponentProps } from 'react-router';
 import MetaTags from 'react-meta-tags';
 import { LinearProgress, Container, Typography } from '@material-ui/core';
-
-// Redux Actions
 import { displaySnackBar } from '../../redux/actions/notifications';
-
-// Page Components
 import Inputs from './inputs';
-import { createItem, uploadImages, fetchItems } from '../../redux/actions/items';
+import { createItem, uploadImages, fetchItems, getCategories } from '../../redux/actions/items';
 import Upload from './image-upload';
 import useStyles from './styles/styles';
+import Category from '../../types/Category';
 
 // Metatags
 const PageMetaTags = () => (
@@ -27,11 +24,13 @@ interface Props extends RouteComponentProps {
     createItem: (body: any, cb: any) => void,
     uploadImages: (itemId: string, body: any, cb: any) => void,
     fetchItems: () => void,
+    getCategories: () => void,
     authError: object,
     response: object,
     error: object,
     history: any,
-    checkAuthLoading: boolean
+    checkAuthLoading: boolean,
+    categories: Array<Category>,
 }
 
 function SellItemPage(props: Props) {
@@ -41,10 +40,15 @@ function SellItemPage(props: Props) {
     const [loading, setLoading] = useState<boolean>(false);
     const classes = useStyles();
 
-    const { authError, history, displaySnackBar, response, error, checkAuthLoading, createItem, uploadImages, fetchItems } = props
+    const {
+        authError, history, displaySnackBar, response, error,
+        checkAuthLoading, createItem, uploadImages, fetchItems,
+        categories, getCategories
+    } = props;
 
     // Redirect to sign in page if user is not authenticated
     useEffect(() => {
+        getCategories()
         if (authError && !checkAuthLoading) {
             displaySnackBar(true, 'You have to sign in before selling an item', 'warning');
             history.push('/signin');
@@ -83,10 +87,10 @@ function SellItemPage(props: Props) {
 
         // POST Action
         createItem(payload, (response: any, error: any) => {
-            
-            displaySnackBar(true, 'Post is currently processing...', 'info');
+
+            if(response) displaySnackBar(true, 'Post is currently processing...', 'info');
             setLoading(false)
-    
+
             if (error) return setErrors(error.reason);
 
             let formData = new FormData();
@@ -99,7 +103,6 @@ function SellItemPage(props: Props) {
 
                 // Display success snackbar & refetch the homepage posts once the images are uploaded
                 displaySnackBar(true, 'Your post is now active', 'success');
-                fetchItems();
             });
 
             // Redirect to the home page
@@ -108,11 +111,7 @@ function SellItemPage(props: Props) {
     }
 
     // Return loading progress bar if check auth is loading
-    if (checkAuthLoading) {
-        return (
-            <LinearProgress />
-        );
-    };
+    if (checkAuthLoading) return <LinearProgress />
 
     return (
         <Container component='main'>
@@ -122,7 +121,12 @@ function SellItemPage(props: Props) {
                 <Typography component="h1" variant="h4" className={classes.title}>Add a new item</Typography>
                 <Upload sendDataToParent={getImageData} errors={errors} />
                 <Container component='main' maxWidth='xs'>
-                    <Inputs onSubmit={onSubmit} sendDataToParent={getInputData} errors={errors} loading={loading} />
+                    <Inputs
+                        onSubmit={onSubmit}
+                        sendDataToParent={getInputData}
+                        errors={errors}
+                        loading={loading}
+                        categories={categories} />
                 </Container>
 
             </div>
@@ -130,19 +134,23 @@ function SellItemPage(props: Props) {
     )
 }
 
+// Map the reducers' state to the component's props
 const mapStateToProps = (state: any) => {
     const { checkAuthError, checkAuthLoading } = state.authReducer;
     const { response, error, loading } = state.createItemReducer;
+    const { response: categories } = state.categoriesReducer;
 
     return {
         authError: checkAuthError,
         checkAuthLoading: checkAuthLoading,
         response: response,
+        categories: categories,
         error: error,
         loading: loading
     }
 };
 
+// Map redux actions to the component props
 const mapDispatchToProps = (dispatch: Dispatch<any>) => {
     return {
         displaySnackBar: (open: boolean, content: string, severity: string) => {
@@ -159,6 +167,10 @@ const mapDispatchToProps = (dispatch: Dispatch<any>) => {
 
         fetchItems: () => {
             dispatch(fetchItems())
+        },
+
+        getCategories: () => {
+            dispatch(getCategories())
         }
     }
 }

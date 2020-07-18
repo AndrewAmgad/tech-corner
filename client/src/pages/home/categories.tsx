@@ -1,33 +1,27 @@
 import React from "react";
 import {Grid, Typography} from '@material-ui/core';
 import Styles from './styles/categories';
-import { withRouter } from "react-router";
+import { withRouter, RouteComponentProps } from "react-router";
 
 import Laptop from '@material-ui/icons/LaptopChromebookRounded';
 import Computer from '@material-ui/icons/Computer';
 import Keyboard from '@material-ui/icons/Keyboard';
 import SportsEsports from '@material-ui/icons/SportsEsports';
+import Watch from '@material-ui/icons/Watch';
 import Tv from '@material-ui/icons/Tv';
 import Speaker from '@material-ui/icons/Speaker';
+import Category from "../../types/Category";
+import AppsIcon from '@material-ui/icons/Apps';
 
+interface Props extends RouteComponentProps{
+    categories: Array<Category>
+};
 
-const categoriesList = [
-    { name: 'Laptops', icon: Laptop },
-    { name: 'Computers', icon: Computer },
-    { name: "TV's & Monitors", icon: Tv },
-    { name: "Gaming Consoles", icon: SportsEsports },
-    { name: "Speakers & Headsets", icon: Speaker },
-    { name: "Accessories", icon: Keyboard}
-]
-
-function Component() {
+function Component({categories}: Props) {
     const classes = Styles();
-
+    
     return (
         <div className={classes.container}>
-            {/* <Typography variant="h5" gutterBottom className={classes.title}>
-                Categories
-            </Typography> */}
 
             <Grid
                 container
@@ -37,8 +31,16 @@ function Component() {
                 spacing={3}>
 
 
-                {categoriesList.map((category, index) => {
-                    const Icon = category.icon;
+                {categories.length > 0 && categories.map((category: Category, index: number) => {
+                    let Icon = AppsIcon;
+
+                    if(category.name === 'Laptops & Computers') Icon = Computer
+                    if(category.name === "TV's & Monitors") Icon = Tv
+                    if(category.name === 'Gaming Consoles') Icon = SportsEsports
+                    if(category.name === 'Speakers & Headsets') Icon = Speaker
+                    if(category.name === 'Accessories') Icon = Keyboard
+                    if(category.name === 'Smart Watches') Icon = Watch
+
                     return (
                         <Grid item className={classes.item} key={index}>
                             <Icon className={classes.icon} />
@@ -58,4 +60,4 @@ function Component() {
 
 const Categories = withRouter(Component)
 
-export {Categories, categoriesList}
+export {Categories}

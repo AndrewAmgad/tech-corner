@@ -2,7 +2,6 @@ import React, {useState, SyntheticEvent, useRef } from 'react';
 import Styles from './styles/styles';
 import { Grid, CircularProgress, Button } from '@material-ui/core';
 import Input from '../../components/InputComponent';
-import { categoriesList } from '../home/categories';
 
 function Inputs(props: any) {
     const classes = Styles();
@@ -26,6 +25,8 @@ function Inputs(props: any) {
 
         if(!title || !details || !category || !price) setButton(false);
         else setButton(true);
+
+        console.log(category)
 
         props.sendDataToParent(inputData)
     };
@@ -73,7 +74,7 @@ function Inputs(props: any) {
                     onChange={onInputChange}
                     type='select'
                     error={props.errors.category}
-                    selectOptions={categoriesList}
+                    selectOptions={props.categories}
                 />
             </Grid>
 

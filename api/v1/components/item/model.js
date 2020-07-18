@@ -1,13 +1,14 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+require('../category/model');
 
 
 const ItemSchema = new Schema({
     images: Array,
     seller: { type: Schema.Types.ObjectId, ref: 'User' },
+    category: {type: Schema.Types.ObjectId, ref: 'category'},
     title: String,
     details: String,
-    category: String,
     price: Number,
     time: Number,
     views: Number,

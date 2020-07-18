@@ -61,10 +61,11 @@ const Input = (props: any) => {
             error={props.error ? true : false}
             helperText={props.error}>
             <MenuItem value="none" disabled>Choose a category</MenuItem>
-            {props.selectOptions?.map((option: any, index: number) => (
-                <MenuItem key={index} value={option.name}>{option.name}</MenuItem>
+            {props.selectOptions.length > 0 && props.selectOptions.map((option: any, index: number) => (
+                <MenuItem key={index} value={option._id}>{option.name}</MenuItem>
             ))}
         </TextField>
+        
     )
     return (
         <TextField

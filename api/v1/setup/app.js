@@ -30,8 +30,10 @@ app.use(
 // import routers
 const userRouter = require('../components/user/router');
 const itemRouter = require('../components/item/router');
+const categoryRouter = require('../components/category/router');
 
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/items', itemRouter);
+app.use('/api/v1/categories', categoryRouter);
 
 module.exports = app

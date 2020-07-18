@@ -65,7 +65,6 @@ export const httpRequest = (reqMethod: string, url: string, query?: any, headers
         /**
          * Check if payload data was provided through the function arguments and add it through the req body
          */
-        console.log(headers);
         if (payload) {
             if(payload instanceof FormData) options.body = payload;
             else options.body = JSON.stringify(payload)

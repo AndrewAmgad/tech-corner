@@ -17,9 +17,9 @@ const navBarStyles = makeStyles(theme => ({
   },
 
   menuButton: {
-    marginRight: theme.spacing(2),
+    marginRight: 16,
     color: theme.palette.primary.main,
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
       display: 'none',
     },
   },
@@ -33,7 +33,7 @@ const navBarStyles = makeStyles(theme => ({
     height: 35,
     marginLeft: 0,
     marginTop: 5,
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
       paddingLeft: 46,
     },
   },
@@ -85,13 +85,13 @@ const drawerStyles = makeStyles(theme => ({
     display: 'flex',
   },
   drawer: {
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
       width: drawerWidth,
       flexShrink: 0,
     },
   },
   appBar: {
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
       width: `calc(100% - ${drawerWidth}px)`,
       marginLeft: drawerWidth,
     },

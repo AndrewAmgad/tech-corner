@@ -6,15 +6,11 @@ const useStyles = makeStyles(theme => {
     return (
         {
             container: {
-                background: theme.palette.background.paper
+                background: theme.palette.background.paper,
             },
 
             gridContainer: {
                 maxWidth: 1300,
-                [theme.breakpoints.up('lg')]: {
-                    paddingLeft: 55,
-                    paddingRight: 55,
-                }
             },
 
             grid: {
@@ -23,23 +19,27 @@ const useStyles = makeStyles(theme => {
 
             i: {
                 width: 383,
-                padding: 12
+                paddingLeft: 12,
+                paddinRight: 12,
             },
 
             title: {
                 color: theme.palette.primary.main,
-                marginTop: 32,
-                marginBottom: 32,
-              
-                [theme.breakpoints.down('sm')]: {
-                    fontSize: 27,
-                    marginTop: 26,
-                    marginBottom: 26
-                },
+                marginTop: 62,
+                paddingLeft: 16,
+                width: 383,
 
-                [theme.breakpoints.up('sm')]: {
-                    textAlign: 'left',
-                }
+                [theme.breakpoints.down('xs')] :{
+                    textAlign: 'center',
+                    paddingLeft: 0
+                },
+             
+
+                [theme.breakpoints.down('md')]: {
+                    fontSize: 27,
+                    marginBottom: 0,
+                    
+                },
             }
         }
     )
