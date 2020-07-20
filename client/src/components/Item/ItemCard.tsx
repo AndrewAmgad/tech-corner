@@ -66,7 +66,6 @@ export default function ItemCard({item, onClick}: Props) {
 
                 <Button className={classes.button} size="small">
                     Message
-                    
                  </Button>
             </CardActions>
         </Card>

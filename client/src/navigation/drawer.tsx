@@ -75,7 +75,7 @@ function NavDrawer(props: NavDrawerProps) {
   // Items visible at the top of the drawer at all times
   const mainItems = [
     { name: "Home", icon: HomeIcon, onClick: () => history.push('/'), path: '/' },
-    { name: "Products", icon: ProductIcon, path: '/products' },
+    // { name: "Products", icon: ProductIcon, path: '/products' },
     { name: "Sell an Item", icon: AddIcon, onClick: () => history.push('/sell'), path: '/sell' },
     { name: "Info", icon: InfoIcon, path: '/info' }
   ];

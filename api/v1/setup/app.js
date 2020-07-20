@@ -3,10 +3,12 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+const helmet = require("helmet")
 
 
 // initialize express app
 const app = express();
+
 
 // AWS Setup
 require('./aws-setup').setup;
@@ -15,6 +17,7 @@ require('./aws-setup').setup;
 require('./mongoose');
 
 // configure body & cookie parser
+app.use(helmet());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(cookieParser());

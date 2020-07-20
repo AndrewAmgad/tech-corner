@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
     paper: {
         backgroundColor: theme.palette.background.paper,
         border: 0,
-        padding: theme.spacing(2, 4, 3),
+        // padding: theme.spacing(2, 4, 3),
         minWidth: 400,
         borderRadius: 5,
         '&:focus': {

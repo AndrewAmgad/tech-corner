@@ -3,7 +3,9 @@
  * Takes time in ms and returns time in minutes, hours or days
  */
 
-export const formatTime = (ms: number) => {
+export const formatTime = (ms: number | undefined) => {
+    if(!ms) return null;
+    
     const currentDate = Date.now();
     const time: number = currentDate - ms;
 
@@ -14,7 +16,7 @@ export const formatTime = (ms: number) => {
 
     const hours: number = parseInt((minutes / 60).toFixed());
 
-    if(hours < 60) {
+    if(hours < 24) {
         if(hours === 1 ) return `${hours} hour ago`
         return `${hours} hours ago`
     }; 
