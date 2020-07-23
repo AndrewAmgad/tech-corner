@@ -24,31 +24,14 @@ import InfoIcon from '@material-ui/icons/InfoOutlined'
 import SigninIcon from '@material-ui/icons/MeetingRoomOutlined'
 import AddIcon from '@material-ui/icons/Add'
 import RegisterIcon from '@material-ui/icons/ExitToApp';
+import StarsIcon from '@material-ui/icons/Stars';
 import { useTheme } from '@material-ui/core/styles';
 
 // App Logo
 import Logo from '../components/Logo';
 import { CssBaseline, Hidden } from '@material-ui/core';
 
-/**
- * Drawer List Item Component
- */
-
-const DrawerItem = (props: any) => {
-  const Icon = props.icon;
-
-  const onItemClick = () => {
-    if (props.onClick) props.onClick();
-    return;
-  }
-
-  return (
-    <ListItem button key={props.name} onClick={() => onItemClick()} selected={props.selected}>
-      <ListItemIcon><Badge badgeContent={props.badgeCount} color="secondary"><Icon /></Badge></ListItemIcon>
-      <ListItemText primary={props.name} />
-    </ListItem>
-  )
-};
+import { DrawerItem } from './drawer-item';
 
 
 /**
@@ -76,6 +59,7 @@ function NavDrawer(props: NavDrawerProps) {
   const mainItems = [
     { name: "Home", icon: HomeIcon, onClick: () => history.push('/'), path: '/' },
     // { name: "Products", icon: ProductIcon, path: '/products' },
+    { name: 'Favorites', icon: StarsIcon, onClick: () => history.push('/favorites'), path: '/favorites'},
     { name: "Sell an Item", icon: AddIcon, onClick: () => history.push('/sell'), path: '/sell' },
     { name: "Info", icon: InfoIcon, path: '/info' }
   ];

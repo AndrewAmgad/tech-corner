@@ -26,6 +26,7 @@ export const refreshAccessToken = () => {
         fetch(`${apiUrl}/v1/users/access-token`, { method: 'GET', credentials: 'include' })
             .then(async response => {
                 let parsedJSON = await response.json()
+                parsedJSON.status = response.status;
                 if (response.status !== 200) return reject(parsedJSON);
                 else resolve();
 
@@ -82,6 +83,7 @@ export const httpRequest = (reqMethod: string, url: string, query?: any, headers
                         // Send the same request again after obtaining a new refresh token
                         fetch(finalUrl.toString(), options).then(async (response) => {
                             const parsedResponse = await response.json();
+                            parsedResponse.status = response.status;
 
                             if (response.status !== 200) reject(parsedResponse);
                             else resolve(parsedResponse);
@@ -89,6 +91,7 @@ export const httpRequest = (reqMethod: string, url: string, query?: any, headers
                     }).catch(err => reject(err))
 
                 } else if (response.status !== 200) {
+                    parsedJSON.status = response.status;
                     reject(parsedJSON)
                 } else resolve(parsedJSON)
 

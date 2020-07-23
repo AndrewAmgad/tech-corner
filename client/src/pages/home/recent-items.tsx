@@ -47,7 +47,8 @@ function RecentItems(props: any) {
 
                         {props.items.map((item: Item, index: number) => (
                             <Grid item key={index}>
-                                <ItemCard item={item} onClick={() => { setModal(true); setSelectedItem(item) }} />
+                                <ItemCard item={item} 
+                                onClick={() => { setModal(true); setSelectedItem(item) }} />
                             </Grid>
                         ))}
 
@@ -59,7 +60,9 @@ function RecentItems(props: any) {
    
 
             </div>
-            <ItemModal item={selectedItem} open={modal} handleClose={() => setModal(false)} />
+
+            {modal && <ItemModal 
+            item={selectedItem} open={modal} handleClose={() => setModal(false)} />}
         </>
     )
 }

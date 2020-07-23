@@ -1,5 +1,7 @@
 const Item = require('../model');
+const User = require('../../user/model');
 const errorResponse = require('../../../helper-functions').errorResponse;
+const mongoose = require('mongoose');
 
 /**
  * GET /items
@@ -67,3 +69,38 @@ module.exports.getOne = (req, res) => {
 
         })
 }
+
+/**
+ * GET /items/:item_id/favorite
+ * Purpose: Add an item to the sending user's favorites array
+ * Returns a success message if added successfully
+ */
+
+module.exports.addToFavorites = async function addToFavorites(req, res) {
+    const userId = req.userId;
+    const itemId = req.params.item_id;
+    const user = await User.findById(userId);
+
+    // Validate provided object ID
+    if(mongoose.Types.ObjectId.isValid(itemId)) {
+       if(user.favorites.includes(itemId)) return errorResponse(res, 400, "Item has already been added to favorites");
+       
+       user.favorites.push(itemId);
+       user.save();
+       res.status(200).json({
+           success: true,
+           message: "Added item to favorites successfully"
+       });
+    } else {
+        return errorResponse(res, 404, "Provided item ID is invalid");
+    };
+};
+
+/** GET /items/favorites
+ * Purpose: Get all favorited items for the user
+ * Returns favorited items in an array
+ */
+
+ module.exports.getFavorites = async function getFavorites(req, res) {
+  
+ };

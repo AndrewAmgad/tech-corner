@@ -5,6 +5,7 @@ import {
     httpRequest
 } from '../helpers';
 import { Dispatch } from 'react';
+import { displaySnackBar } from './notifications';
 
 /**
  * GET /api/v1/items
@@ -86,4 +87,34 @@ export function getCategories() {
             })
             .catch(err => dispatch(fetchDataFailure('GET_CATEGORIES', err.message)))
     }
-}
+};
+
+/** 
+ * GET /items/:item_id/favorite
+ * Adds the sent item to the user's favorites array
+ */
+
+ export function addToFavorites(id: string,) {
+     return (dispatch: Dispatch<any>) => {
+         httpRequest('GET', `/v1/items/${id}/favorite`)
+         .then((response) => {
+             dispatch(fetchDataSuccess('ADD_FAVORITE', response))
+             dispatch(displaySnackBar(true, 'Added to favorites', 'success'))
+         })
+         .catch(err => {
+             dispatch(fetchDataFailure('ADD_FAVORITE', err));
+             if(err.status === 401) dispatch(displaySnackBar(true, 'Sign in to track your favorite items', 'warning'))
+             else dispatch(displaySnackBar(true, err.reason, 'info'));
+         })
+     }
+ };
+
+/**
+ * Clear the favorites reducer state
+ */
+
+export function clearFavorites(){
+    return (dispatch: Dispatch<any>) => {
+        dispatch({type: "CLEAR_FAVORITES"})
+    }
+};

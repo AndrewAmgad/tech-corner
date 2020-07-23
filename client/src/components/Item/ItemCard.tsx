@@ -15,10 +15,12 @@ import placeholder from '../../images/placeholder-image.png'
 import itemStyles from '../styles/item-styles';
 import { formatTime } from '../../helpers';
 import Item from '../../types/Item';
+import { addToFavorites } from '../../redux/actions/items';
+import store from '../../setup/redux-store';
 
 interface Props {
     item: Item,
-    onClick: () => void
+    onClick: () => void,
 }
 
 
@@ -60,7 +62,7 @@ export default function ItemCard({item, onClick}: Props) {
             </CardActionArea>
             <CardActions>
 
-                <Button className={classes.button} size="small">
+                <Button className={classes.button} size="small" onClick={() => store.dispatch(addToFavorites(item._id))}>
                     Favorite
                 </Button>
 

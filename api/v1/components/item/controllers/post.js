@@ -1,7 +1,6 @@
 // Database Models
 const Item = require('../model');
 const User = require('../../user/model');
-const Category = require('../../category/model');
 
 const errorResponse = require('../../../helper-functions').errorResponse;
 const uploadImages = require('../../../setup/aws-setup').uploadImages;
@@ -31,7 +30,7 @@ module.exports.createItem = async function createItem(req, res) {
 
     const user = await User.findById(userId).catch(err => (errorResponse(res, 500, err.message)));
 
-    // Save product to the database
+    // Create new Item database object
     const item = new Item({
         images: [],
         seller: userId,
@@ -75,7 +74,6 @@ module.exports.uploadItemImages = async function uploadItemImages(req, res) {
 
     // Upload the received images
     uploadImages(req, res, error => {
-
         if (error) return errorResponse(res, 500, error.message);
         if (req.files === undefined) return errorResponse(res, 400, 'No files received');
 
@@ -85,7 +83,6 @@ module.exports.uploadItemImages = async function uploadItemImages(req, res) {
 
         filesArray.map((file) => {
             imageKey = file.key;
-
             if(item.images.length + imageKeys.length < 4) imageKeys.push(imageKey);
         });
 
@@ -96,4 +93,5 @@ module.exports.uploadItemImages = async function uploadItemImages(req, res) {
             images: item.images
         });
     })
-}
+};
+

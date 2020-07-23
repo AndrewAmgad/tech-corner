@@ -5,6 +5,7 @@ import fetchItemsReducer from '../redux/reducers/Items/fetch-items';
 import createItemReducer from '../redux/reducers/Items/create-item';
 import notificationReducer from '../redux/reducers/notifications';
 import categoriesReducer from '../redux/reducers/Items/categories';
+import favoritesReducer from '../redux/reducers/Items/favorites';
 
 export default createStore(
     combineReducers({
@@ -12,7 +13,8 @@ export default createStore(
         fetchItemsReducer,
         createItemReducer,
         notificationReducer,
-        categoriesReducer
+        categoriesReducer,
+        favoritesReducer
     }),
     {},
     applyMiddleware(thunk)

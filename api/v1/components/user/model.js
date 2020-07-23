@@ -14,7 +14,8 @@ const UserSchema = new Schema({
     }],
 
     country: {type: String},
-    items: [{ type: Schema.Types.ObjectId, ref: 'Product' }],
+    items: [{ type: Schema.Types.ObjectId, ref: 'Item' }],
+    favorites: [{type: Schema.Types.ObjectId, ref: 'Item'}],
     phone: {type: String, required: true},
 
 });

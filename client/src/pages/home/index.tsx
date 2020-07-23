@@ -2,7 +2,7 @@ import React, { useEffect, Dispatch, useState } from 'react';
 import { Container, LinearProgress } from '@material-ui/core'
 import { withRouter, RouteComponentProps } from 'react-router';
 import { connect } from 'react-redux';
-import { fetchItems, getCategories, clearItems } from '../../redux/actions/items';
+import { fetchItems, getCategories, clearItems, addToFavorites } from '../../redux/actions/items';
 import HomeStyles from './styles/home';
 import MetaTags from 'react-meta-tags';
 
@@ -29,14 +29,13 @@ interface HomeProps extends RouteComponentProps {
     categoriesLoading: boolean,
     fetchItems: (page?: number, cb?: () => void) => void,
     getCategories: () => void,
-    clearItems: () => void
+    clearItems: () => void,
 }
 
 
 function Home(props: HomeProps) {
     const classes = HomeStyles();
     const [paginatedItems, setPaginatedItems] = useState<any>(undefined);
-    const [currentPage, setCurrentPage] = useState<number>(1);
     const [bottomReached, setBottomReached] = useState<boolean>(false);
 
 
@@ -72,7 +71,6 @@ function Home(props: HomeProps) {
     useEffect(() => {
         if (props.response.has_more) {
             if (bottomReached) {
-                console.log('called')
                 fetchMore()
             }
         }
@@ -136,7 +134,7 @@ const mapDispatchToProps = (dispatch: Dispatch<any>) => {
 
         getCategories: () => {
             dispatch(getCategories());
-        }
+        },
     };
 };
 
