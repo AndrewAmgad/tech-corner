@@ -10,7 +10,7 @@ Tech Corner is a platform that allows users to buy & sell their tech products su
 The project is still undergoing slow-development.
 
 ## Project's Main Concerns
-- Clean code structure, allowing for ease of development & modifications.
+- Clean code structure, allowing for ease of development & maintainability.
 - Modern & responsive design that adapts to all devices and screen sizes.
 - Compatiable with system-wide dark mood settings.
 - Snappy & stable UI.
