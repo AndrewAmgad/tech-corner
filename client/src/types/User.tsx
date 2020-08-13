@@ -3,7 +3,7 @@ type User = {
     lastName: string,
     name: String,
     email: string,
-    country: string,
+    city: {name: string, id: number},
     phone: string
 };
 

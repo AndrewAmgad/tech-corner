@@ -9,6 +9,8 @@ import { signUp } from '../../redux/actions/auth';
 
 // Sign Up component
 import SignUpComponent from './SignUpForm';
+import { fetchCities } from '../../redux/actions/location';
+import { LinearProgress } from '@material-ui/core';
 
 const PageMetaTags = () => (
     <MetaTags>
@@ -44,13 +46,14 @@ function SignUp(props: any) {
     const [submitButton, enableSubmitButton] = useState<boolean>(false);
 
     const getInputData = (inputData: any) => {
+        console.log(inputData)
         if (!inputData) return;
         setInputs(inputData);
         let inputErrors = {}
 
         // Input Validation
 
-        const { firstName, lastName, email, password, country, phone } = inputData;
+        const { firstName, lastName, email, password, city, phone } = inputData;
 
         if (firstName && firstName.length < 4) inputErrors = ({ ...inputErrors, firstName: "First name must contain at least 4 characters" })
         else inputErrors = ({ ...inputErrors, firstName: null });
@@ -58,9 +61,9 @@ function SignUp(props: any) {
         if (lastName && lastName.length < 4) inputErrors = ({ ...inputErrors, lastName: "Last name must contain at least 4 characters" })
         else inputErrors = ({ ...inputErrors, lastName: null });
 
-        // // COUNTRY WILL BE EDITED ONCE A DROP DOWN LIST IS ADDED
-        if (country && country.length < 3) inputErrors = ({ ...inputErrors, country: "Country must contain at least 4 characters" })
-        else inputErrors = ({ ...inputErrors, country: null })
+        // // // COUNTRY WILL BE EDITED ONCE A DROP DOWN LIST IS ADDED
+        if (city && city === "none" || city && city.length < 3) inputErrors = ({ ...inputErrors, city: "Please select a city" })
+        else inputErrors = ({ ...inputErrors, city: null })
 
         if (password && !validatePassword(password)) inputErrors = ({ ...inputErrors, password: "Password must be a mixture of characters & numbers and contain minimum 8 characters" })
         else inputErrors = ({ ...inputErrors, password: null });
@@ -74,6 +77,11 @@ function SignUp(props: any) {
         setErrors(inputErrors)
     };
 
+    // Fetch all cities from the API once the component mounts
+    useEffect(() => {
+        props.fetchCities()
+    }, [])
+
     // Redirect to the home page if the user is already authenticated
     useEffect(() => {
         if (props.checkAuthResponse) props.history.push('/');
@@ -81,20 +89,23 @@ function SignUp(props: any) {
 
     // Disable the Submit button if any of the inputs are empty or if there's an error
     useEffect(() => {
-        if (!inputs) return;
-        const { firstName, lastName, email, password, country, phone } = inputs;
-        let error = false;
+        // if (!inputs) return;
+        // const { firstName, lastName, email, password, city, phone } = inputs;
 
-        // Check each property of the errors object for errors
-        for (let key in errors) {
-            if (errors.hasOwnProperty(key)) {
-                if (errors[key]) error = true
-            }
-        }
+        // let error = false;
 
-        // Check if all inputs are filled before enabling the button
-        if (firstName && lastName && email && password && country && phone && !error) return enableSubmitButton(true);
-        else return enableSubmitButton(false);
+        // // Check each property of the errors object for errors
+        // for (let key in errors) {
+        //     if (errors.hasOwnProperty(key)) {
+        //         if (errors[key]) error = true
+        //     }
+        // }
+
+        // // Check if all inputs are filled before enabling the button
+        // if (firstName && lastName && email && password && city !== 'none' && phone && !error) return enableSubmitButton(true);
+        // else return enableSubmitButton(false);
+
+        enableSubmitButton(true);
 
     }, [errors, inputs])
 
@@ -111,9 +122,13 @@ function SignUp(props: any) {
     }, [props.authResponse, props.responseError]);
 
     const onSubmit = () => {
-        const { firstName, lastName, email, password, country, phone } = inputs;
-        props.signUp({ firstName, lastName, email, password, country, phone });
-    }
+        if(!inputs) return;
+        console.log(inputs)
+        const { firstName, lastName, email, password, city, phone } = inputs;
+        props.signUp({ firstName, lastName, email, password, city, phone });
+    };
+
+    if(props.citiesLoading) return <LinearProgress />
 
     return (
         <>
@@ -124,7 +139,9 @@ function SignUp(props: any) {
                 submitButton={submitButton}
                 authResponse={props.authResponse}
                 authLoading={props.authLoading}
+                citiesLoading={props.citiesLoading}
                 checkAuthLoading={props.checkAuthLoading}
+                cities={props.citiesResponse}
             />
         </>
     )
@@ -133,12 +150,18 @@ function SignUp(props: any) {
 // Map the redux reducer's state to the component's props
 const mapStateToProps = (state: any) => {
     const { authResponse, checkAuthResponse, authLoading, checkAuthLoading, authError } = state.authReducer;
+    const {response: citiesResponse, loading: citiesLoading} = state.locationReducer;
+
+
     return {
         authResponse: authResponse,
         checkAuthResponse: checkAuthResponse,
+        citiesResponse: citiesResponse,
         checkAuthLoading: checkAuthLoading,
+        citiesLoading: citiesLoading,
         authLoading: authLoading,
-        responseError: authError
+        responseError: authError,
+
     };
 };
 
@@ -150,6 +173,9 @@ const mapDispatchToProps = (dispatch: any) => {
         },
         displaySnackBar: (open: boolean, content: string, severity: string) => {
             dispatch(displaySnackBar(open, content, severity))
+        },
+        fetchCities: () => {
+            dispatch(fetchCities())
         }
     };
 };

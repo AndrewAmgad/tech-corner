@@ -13,9 +13,9 @@ const UserSchema = new Schema({
         expiresAt: {type: Number, required: true}
     }],
 
-    country: {type: String},
-    items: [{ type: Schema.Types.ObjectId, ref: 'Item' }],
-    favorites: [{type: Schema.Types.ObjectId, ref: 'Item'}],
+    city: {type: Object},
+    items: [{ type: Schema.Types.ObjectId, ref: 'item' }],
+    favorites: [{type: Schema.Types.ObjectId, ref: 'item'}],
     phone: {type: String, required: true},
 
 });

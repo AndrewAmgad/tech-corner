@@ -69,16 +69,19 @@ function Inputs(props: any) {
 
             <Grid item xs={12}>
                 <Input
-                    name="Select Category"
+                    name="category"
                     inputRef={categoryInput}
                     onChange={onInputChange}
                     type='select'
                     error={props.errors.category}
                     selectOptions={props.categories}
+                    title={"Choose a category"}
                 />
             </Grid>
 
-            <Button disabled={!button ? !button : props.loading} type="submit" fullWidth variant="contained" color="primary" onClick={() => onInputChange()}
+            <Button disabled={!button ? !button : props.loading} 
+            type="submit" 
+            fullWidth variant="contained" color="primary" onClick={() => onInputChange()}
                 className={classes.submit}>
                 {props.loading ? <CircularProgress size={26} /> : "Submit"}
             </Button>

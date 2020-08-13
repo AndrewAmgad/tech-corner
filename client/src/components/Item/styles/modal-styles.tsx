@@ -22,13 +22,11 @@ const useStyles = makeStyles((theme) => {
                 borderRadius: '0px 0px 0px 0px',
                 width: '30px !important',
                 visibility: 'hidden',
-                top: 0,
+                top: -5,
 
                 [theme.breakpoints.down('xs')]: {
                     visibility: 'visible'
                 }
-         
-
             },
 
             body: {
@@ -64,8 +62,18 @@ const useStyles = makeStyles((theme) => {
                 marginLeft: 'auto',
                 marginRight: 'auto',
                 color: theme.palette.primary.main,
-                width: "33.3%"
+                // width: "33.3%"
+                // width: "50%"
             },
+
+            buttonIcon: {
+                height: 22,
+                marginRight: 12
+            },
+
+            menuItem: {
+                padding: 12
+            }
         }
     )
 });

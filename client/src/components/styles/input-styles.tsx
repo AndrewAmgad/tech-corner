@@ -5,7 +5,7 @@ export default makeStyles((theme) => {
     return (
         {
             inputField: {
-                background: theme.palette.background.default
+                background: theme.palette.background.default,
             },
 
             form: {

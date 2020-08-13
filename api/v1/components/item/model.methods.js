@@ -37,7 +37,8 @@ module.exports = (ItemSchema) => {
                         const seller = {
                             id: item.seller._id,
                             name: item.seller.firstName + " " + item.seller.lastName,
-                            phone: item.seller.phone
+                            phone: item.seller.phone,
+                            city: item.seller.city
                         };
                         item.seller = seller;
                     });

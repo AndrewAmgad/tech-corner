@@ -19,7 +19,6 @@ function RecentItems(props: any) {
     const [selectedItem, setSelectedItem] = useState<Item>();
     const classes = HomeStyles();
 
-
     if (!props.items) return <></>
 
     return (

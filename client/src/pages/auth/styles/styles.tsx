@@ -40,6 +40,8 @@ export default makeStyles((theme) => {
       
             submit: {
                 margin: theme.spacing(3, 0, 2),
+                height: 52,
+                fontSize: 16
                 
             },
         })

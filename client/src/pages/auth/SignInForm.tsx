@@ -81,6 +81,9 @@ function SignIn(props: any) {
                         <Input name="Password" type='password' inputRef={passwordInput} onChange={onInputChange} />
                     </Grid>
 
+                    <br />
+
+
                     {/* Remember me checkbox */}
                     <FormControlLabel
                         control={<Checkbox value="remember" />}

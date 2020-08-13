@@ -1,11 +1,14 @@
 const Item = require('../model');
+const User = require('../../user/model');
+
 const errorResponse = require('../../../helper-functions').errorResponse;
 const aws = require('../../../setup/aws-setup').setup;
+
 /**
  * DELETE /items/:item_id
  * Purpose: Delete an item using its ID
  */
-module.exports = async (req, res) => {
+module.exports.deleteItem = async (req, res) => {
     const userId = req.userId;
     const itemId = req.params.item_id;
 
@@ -36,3 +39,27 @@ module.exports = async (req, res) => {
         });
     }).catch(err => errorResponse(res, 500, err.message));
 };
+
+/** 
+ * DELETE /items/:item_id/favorite
+ * Purpose: Remove an item from the user's favorites array
+ */
+
+module.exports.deleteFavorite = async (req, res) => {
+    const userId = req.userId;
+    const itemId = req.params.item_id;
+    const user = await User.findById(userId);
+
+    if (user.favorites.includes(itemId)) {
+        const index = user.favorites.indexOf('5f1307a59290651fccc89c30');
+        user.favorites.splice(index, 1);
+
+        user.save().then(() => {
+            res.status(200).json({ success: true, message: "Item removed from favorites successfully" })
+        });
+        
+    } else {
+        return errorResponse(res, 400, "This item is not in your favorites");
+    };
+
+}

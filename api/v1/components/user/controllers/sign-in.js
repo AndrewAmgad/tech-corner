@@ -19,9 +19,9 @@ module.exports = signIn = async (req, res, next) => {
             }).then((authTokens) => {
 
                 // Set the response cookies
-                res.cookie('accessToken', authTokens.accessToken, { httpOnly: true, maxAge: 300000 });
-                res.cookie('refreshToken', authTokens.refreshToken, { httpOnly: true, maxAge: 604800000 });
-                res.cookie('_id', user._id, {httpOnly: true, maxAge: 604800000})
+                res.cookie('accessToken', authTokens.accessToken, { httpOnly: true, maxAge: 300000, sameSite: true});
+                res.cookie('refreshToken', authTokens.refreshToken, { httpOnly: true, maxAge: 604800000, sameSite: true });
+                res.cookie('_id', user._id, {httpOnly: true, maxAge: 604800000, sameSite: true})
 
                 // Set response header, status code and send the user object as a json response
                 res

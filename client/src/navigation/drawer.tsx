@@ -56,6 +56,10 @@ function NavDrawer(props: NavDrawerProps) {
   const { open, toggleDrawer, auth, username, signOut, history, loading } = props;
 
   // Items visible at the top of the drawer at all times
+ /**
+  * TODO: Add an array to the categories object, which will be checked by the DrawerItem component
+  * and displayed as a submenu.
+  */
   const mainItems = [
     { name: "Home", icon: HomeIcon, onClick: () => history.push('/'), path: '/' },
     // { name: "Products", icon: ProductIcon, path: '/products' },
@@ -69,10 +73,10 @@ function NavDrawer(props: NavDrawerProps) {
     { name: username, icon: AccountIcon, path: '' },
     { name: "Messages", icon: MessageIcon, badgeCount: 4, path: '' },
     { name: "Sign Out", icon: LogoutIcon, onClick: () => signOut(), path: '' },
-  ] : !loading ? [
+  ] :  [
       { name: "Sign In", icon: SigninIcon, onClick: () => props.history.push('/signin'), path: '/signin' },
       { name: "Register", icon: RegisterIcon, onClick: () => props.history.push('/signup'), path: '/signup' }
-    ] : [];
+    ];
 
   // Drawer items list
   const list = (mobile: boolean) => (

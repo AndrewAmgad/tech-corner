@@ -1,6 +1,6 @@
 import React from 'react';
 
-// Material UI Component
+// Material UI Components
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
@@ -10,9 +10,11 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import placeholder from '../../images/placeholder-image.png'
+import StarsIcon from '@material-ui/icons/Stars';
+import MessageIcon from '@material-ui/icons/Message';
 
 // Component Styles
-import itemStyles from '../styles/item-styles';
+import itemStyles from './styles/item-styles';
 import { formatTime } from '../../helpers';
 import Item from '../../types/Item';
 import { addToFavorites } from '../../redux/actions/items';
@@ -24,7 +26,7 @@ interface Props {
 }
 
 
-export default function ItemCard({item, onClick}: Props) {
+export default function ItemCard({ item, onClick }: Props) {
     const classes = itemStyles();
 
     const time = formatTime(item.time);
@@ -37,25 +39,25 @@ export default function ItemCard({item, onClick}: Props) {
                     image={item.images[0] ? process.env.REACT_APP_AWS_URL + "/" + item.images[0] : placeholder}
                 />
                 <CardContent>
-                    <Typography gutterBottom variant="h6" component="h2" style={{height: 32, overflow: 'hidden'}}>
+                    <Typography gutterBottom variant="h6" component="h2" style={{ height: 32, overflow: 'hidden' }}>
                         {item.title}
                     </Typography>
 
                     {/* Row Grid */}
-                    <Grid style={{marginBottom: 12}} container direction="row"  justify="space-between" alignItems="flex-start">
+                    <Grid style={{ marginBottom: 12 }} container direction="row" justify="space-between" alignItems="flex-start">
 
-                    <Typography className={classes.date} variant="subtitle2" component="p">
-                        Cairo, Egypt
+                        <Typography variant="subtitle2" component="p">
+                            {item.seller.city.name}, Egypt
                       </Typography>
 
-                    <Typography variant="body2" color="textSecondary" component="p">
-                    {time}     
-                    </Typography>
+                        <Typography variant="body2" color="textSecondary" component="p" className={classes.date}>
+                            {time}
+                        </Typography>
 
                     </Grid>
 
                     <Typography className={classes.price} variant="subtitle2" gutterBottom>
-                          {item.price} EGP
+                        {item.price} EGP
                       </Typography>
 
                 </CardContent>
@@ -63,11 +65,11 @@ export default function ItemCard({item, onClick}: Props) {
             <CardActions>
 
                 <Button className={classes.button} size="small" onClick={() => store.dispatch(addToFavorites(item._id))}>
-                    Favorite
+                    <StarsIcon className={classes.buttonIcon} /> Favorite
                 </Button>
 
                 <Button className={classes.button} size="small">
-                    Message
+                    <MessageIcon className={classes.buttonIcon} /> Message
                  </Button>
             </CardActions>
         </Card>

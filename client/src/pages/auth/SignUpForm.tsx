@@ -1,4 +1,4 @@
-import React, { useRef, useState, SyntheticEvent } from 'react';
+import React, { useRef, useState, SyntheticEvent, useEffect } from 'react';
 import {
   LinearProgress,
   CircularProgress,
@@ -31,8 +31,9 @@ function SignUp(props: any) {
     passwordInput =useRef<HTMLInputElement>(null),
     firstNameInput = useRef<HTMLInputElement>(null),
     lastNameInput = useRef<HTMLInputElement>(null),
-    countryInput = useRef<HTMLInputElement>(null),
-    [phoneInput, setPhoneInput] = useState<string>();
+    cityInput = useRef<HTMLInputElement>(null),
+    [phoneInput, setPhoneInput] = useState<string>(),
+    [city, setCity] = useState<any>();
 
   // Errors prop object
   const errors = props.errors;
@@ -45,9 +46,11 @@ function SignUp(props: any) {
       lastName: lastNameInput.current?.value,
       email: emailInput.current?.value,
       phone: phoneInput,
-      country: countryInput.current?.value,
+      city: city,
       password: passwordInput.current?.value,
     }
+
+    console.log(inputData)
 
     props.sendDataToParent(inputData);
   }
@@ -60,7 +63,12 @@ function SignUp(props: any) {
     props.onSubmit();
   };
 
-  if (props.checkAuthLoading) {
+  useEffect(() => {
+    onInputChange()
+  }, [city])
+
+
+  if (props.checkAuthLoading || props.citiesLoading) {
     return (
       <LinearProgress />
     )
@@ -97,10 +105,17 @@ function SignUp(props: any) {
               <Input name="Email" error={errors.email} inputRef={emailInput} onChange={onInputChange} />
             </Grid>
 
-            {/* Country Field */}
-            <Grid item xs={12}>
-              <Input name="Country" error={errors.country} inputRef={countryInput} onChange={onInputChange} />
-            </Grid>
+            {/* City Field */}
+            {props.cities && <Grid item xs={12}>
+              <Input name="City" 
+              selectOptions={props.cities.cities}
+              error={errors.city} 
+              inputRef={cityInput} 
+              onChange={onInputChange}
+              value={(value: any) => setCity(value)}
+              type='select'
+              title="Choose a city" />
+            </Grid>}
 
             {/* Phone Number Field */}
             <Grid item xs={12}>
@@ -133,7 +148,7 @@ function SignUp(props: any) {
             disabled={!props.submitButton}
             variant="contained"
             color="primary"
-            onClick={onSubmit}
+            onClick={(e) => {onInputChange(); onSubmit(e)}}
             className={classes.submit}>
             {props.authLoading ? <CircularProgress size={26} /> : 'Sign Up'}
           </Button>

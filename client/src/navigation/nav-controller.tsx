@@ -13,7 +13,6 @@ function Navigation({checkAuth, response, signOut, history, loading, displaySnac
     const [drawer, setDrawer] = React.useState(false);
     const [auth, setAuth] = React.useState(false);
 
-    
     // Check user authentication once the component gets loaded 
     useEffect(() => {
         checkAuth();

@@ -42,7 +42,7 @@ export default function authReducer(state = initialState, action: any) {
             return { ...state, checkAuthLoading: false, checkAuthResponse: null, checkAuthError: action.payload.error }
 
         case "SIGN_OUT_FAILURE":
-            return {...state, authLoading: false, signOutError: action.payload.data, authError: null}
+            return {...state, authLoading: false, signOutError: action.payload.error, authError: null}
 
         default:
             return state;

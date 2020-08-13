@@ -9,7 +9,8 @@ type Item = {
     price: number,
     time: number,
     views: number,
-    seller: User
+    seller: User,
+    editable: boolean
 }
 
 export default Item

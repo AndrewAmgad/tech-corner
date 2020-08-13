@@ -1,0 +1,108 @@
+{
+    "cities": [
+        {
+            "id": 872,
+            "name": "Ad Daqahliyah"
+        },
+        {
+            "id": 873,
+            "name": "Al Bahr al Ahmar"
+        },
+        {
+            "id": 874,
+            "name": "Al Buhayrah"
+        },
+        {
+            "id": 875,
+            "name": "Al Fayyum"
+        },
+        {
+            "id": 876,
+            "name": "Al Gharbiyah"
+        },
+        {
+            "id": 877,
+            "name": "Alexandria"
+        },
+        {
+            "id": 878,
+            "name": "Al Isma'iliyah"
+        },
+        {
+            "id": 879,
+            "name": "Giza"
+        },
+        {
+            "id": 880,
+            "name": "Al Minufiyah"
+        },
+        {
+            "id": 881,
+            "name": "Al Minya"
+        },
+        {
+            "id": 882,
+            "name": "Cairo"
+        },
+        {
+            "id": 883,
+            "name": "Al Qalyubiyah"
+        },
+        {
+            "id": 884,
+            "name": "Al Wadi al Jadid"
+        },
+        {
+            "id": 885,
+            "name": "Ash Sharqiyah"
+        },
+        {
+            "id": 886,
+            "name": "Suez"
+        },
+        {
+            "id": 887,
+            "name": "Aswan"
+        },
+        {
+            "id": 888,
+            "name": "Asyut"
+        },
+        {
+            "id": 889,
+            "name": "Bani Suwayf"
+        },
+        {
+            "id": 890,
+            "name": "Port Said"
+        },
+        {
+            "id": 891,
+            "name": "Dumyat"
+        },
+        {
+            "id": 892,
+            "name": "Janub Sina'"
+        },
+        {
+            "id": 893,
+            "name": "Kafr ash Shaykh"
+        },
+        {
+            "id": 894,
+            "name": "Matruh"
+        },
+        {
+            "id": 895,
+            "name": "Qina"
+        },
+        {
+            "id": 896,
+            "name": "Shamal Sina'"
+        },
+        {
+            "id": 897,
+            "name": "Suhaj"
+        }
+    ]
+}

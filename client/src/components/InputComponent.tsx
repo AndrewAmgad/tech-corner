@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import MaterialUiPhone from 'material-ui-phone-number';
 import TextField from '@material-ui/core/TextField';
 import Styles from './styles/input-styles';
@@ -9,6 +9,7 @@ import { MenuItem } from '@material-ui/core';
  */
 const Input = (props: any) => {
     const classes = Styles();
+    const [selected, setSelected] = useState<any>('none');
 
     // Styling classes for the inputLabel
     const InputLabelProps = {
@@ -35,7 +36,7 @@ const Input = (props: any) => {
                 name="phone"
                 required
                 fullWidth
-
+         
                 // Work-around to pass phoneInput to onInputChange(), as MaterialUiPhone doesn't support inputRef
                 onChange={(value: any) => {
                     props.onChange(value)
@@ -50,19 +51,26 @@ const Input = (props: any) => {
         <TextField
             select
             fullWidth
-            onChange={props.onChange}
+            onChange={(e) => {
+                props.value && props.value(e.target.value);
+                props.onChange && props.onChange();
+            }}
             inputRef={props.inputRef} 
             label={props.name}
             required
             InputLabelProps={InputLabelProps}
             InputProps={InputProps}
             variant="outlined"
-            defaultValue={'none'}
+            // defaultValue={'none'}
+            value={selected}
             error={props.error ? true : false}
             helperText={props.error}>
-            <MenuItem value="none" disabled>Choose a category</MenuItem>
+            <MenuItem value="none" disabled>{props.title}</MenuItem>
             {props.selectOptions.length > 0 && props.selectOptions.map((option: any, index: number) => (
-                <MenuItem key={index} value={option._id}>{option.name}</MenuItem>
+                <MenuItem key={index} value={option._id ? option._id : option.id} 
+                onClick={() => {
+                    setSelected(option.id ? option.id : option._id)
+                }}>{option.name}</MenuItem>
             ))}
         </TextField>
         
@@ -85,6 +93,7 @@ const Input = (props: any) => {
             InputProps={InputProps}
             rows={props.rows}
             multiline={props.multiline}
+            value={props.value}
 
         />
     )

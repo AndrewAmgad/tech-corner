@@ -1,4 +1,4 @@
-const errorResponse = require('../../../helper-functions');
+const errorResponse = require('../../../helper-functions').errorResponse;
 const User = require('../../user/model');
 
 /**

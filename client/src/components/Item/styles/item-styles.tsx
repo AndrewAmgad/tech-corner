@@ -29,6 +29,7 @@ const itemStyles = makeStyles(theme => ({
         fontWeight: 600,
         color: theme.palette.primary.main,
         marginBottom: 0
+        
     },
 
     button: {
@@ -37,8 +38,13 @@ const itemStyles = makeStyles(theme => ({
         color: theme.palette.primary.main
     },
 
+    buttonIcon: {
+        height: 20,
+        marginRight: 12
+    },
+
     date: {
-        marginTop: 2
+        paddingTop: 2
     }
 }));
 

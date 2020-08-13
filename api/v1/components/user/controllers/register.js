@@ -1,5 +1,8 @@
 const User = require('../model');
 const errorResponse = require('../../../helper-functions').errorResponse;
+const fs = require('fs');
+const citiesFile = fs.readFileSync('cities.json');
+const file = JSON.parse(citiesFile);
 
 /**
  * Check if the provided input matches a proper email format
@@ -23,7 +26,7 @@ const validatePassword = (password) => {
  * Validate all inputs and make sure they match the specified criteria 
  * Returns the found errors, if no errors are found, returns true
  */
-const validateInputs = async (email, firstName, lastName, password, phone) => {
+const validateInputs = async (email, firstName, lastName, password, phone, city) => {
     var error = false;
     var errors = {};
     var errorCode = 400;
@@ -41,7 +44,8 @@ const validateInputs = async (email, firstName, lastName, password, phone) => {
     if(lastName.length > 10 || lastName.length < 4) {error= true, errors.lastName= "First name must contain 4 to 10 characters"}
     if (!password || password.length < 8 || password.length > 50) { error = true; errors.password = "Password is too short or too long"; }
     if (!validatePassword(password)) { error = true; errors.password = "Password must be a mixture of both characters and numbers" }
-    if(!phone) { error = true, errors.phone = "Phone number must be provided"}
+    if(!phone) { error = true, errors.phone = "Phone number must be provided"};
+    if(!city || city === 'none') {error = true; errors.city = "City name must be provided"}
 
     // Send back an error if any of the above conditions return one
     return new Promise((resolve, reject) => {
@@ -68,9 +72,9 @@ module.exports = register = async (req, res, next) => {
     let lastName = req.body.lastName;
     const password = req.body.password;
     const phone = req.body.phone;
-    const country = req.body.country;
+    const city = req.body.city;
 
-    const inputsValidation = await validateInputs(email, firstName, lastName, password, phone)
+    const inputsValidation = await validateInputs(email, firstName, lastName, password, phone, city)
         .catch((err) => (errorResponse(res, err.code, err.messages)));
 
     // Stop code executing if validateInputs returns an error
@@ -80,8 +84,13 @@ module.exports = register = async (req, res, next) => {
     firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1);
     lastName = lastName.charAt(0).toUpperCase() + lastName.slice(1);
 
+    // Get the city object using its ID
+    let cityObject = {};
+    file.cities.map((index) => {
+        if(index.id === city) cityObject = index;
+    })
 
-    let newUser = new User({ email, firstName, lastName, country, password, phone });
+    let newUser = new User({ email, firstName, lastName, city: cityObject, password, phone });
 
     newUser.save().then(() => {
 
