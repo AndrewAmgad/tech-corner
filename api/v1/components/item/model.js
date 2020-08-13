@@ -14,6 +14,8 @@ const ItemSchema = new Schema({
     views: Number,
 });
 
+ItemSchema.index({title: 'text', details: 'text'})
+
 // Model Methods
 require('./model.methods')(ItemSchema);
 

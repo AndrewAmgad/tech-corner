@@ -136,9 +136,20 @@ module.exports.getFavorites = async function getFavorites(req, res) {
         if (userId && userId.toString() === item.seller._id.toString()) item.editable = true;
         else item.editable = false;
     })
-
-
     res.status(200).json(favorites);
 
+};
 
+/** 
+ * GET /items/search?query
+ * Purpose: Return all items that match the provided search query
+ */
+
+ module.exports.search = async function searchItems(req, res) {
+    const searchQuery = req.query.query;
+     Item.findAndPaginate({$text: {$search: searchQuery}}).then(response => {
+         res.status(200).json(response);
+     }).catch(err => {
+         errorResponse(res, 500, err);
+     });
 };
