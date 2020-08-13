@@ -29,3 +29,10 @@ The project is still undergoing slow-development.
 
 ## Preview Screenshots
 <img src="https://i.imgur.com/6XMfVzv.png" alt="screenshot1" height="200"> <img src="https://i.imgur.com/UtnJgbY.png" alt="screenshot1" height="200">
+
+## Author
+Andrew Amgad,
+<br />
+andrewamgad30@gmail.com
+<br />
+https://andrewamgad.com
