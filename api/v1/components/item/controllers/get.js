@@ -22,10 +22,6 @@ module.exports.getAll = (req, res) => {
         let date = new Date().getTime();
 
         response.items.map((item, index) => {
-            // Add an 'editable' boolean which is true if the post is editable by the requesting user
-            if (userId && userId.toString() === item.seller.id.toString()) item.editable = true;
-            else item.editable = false;
-
             // Remove items which have been submitted but their images are still uploading
             if (date - item.time < 120000 && item.images.length < 1) {
                 response.items.splice(index, 1);

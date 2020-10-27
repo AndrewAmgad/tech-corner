@@ -7,16 +7,11 @@ import {
   Drawer,
   List,
   Divider,
-  ListItem,
-  ListItemText,
-  Badge,
   Typography,
 } from '@material-ui/core'
 
 // List Icons
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import HomeIcon from '@material-ui/icons/HomeOutlined'
-import ProductIcon from '@material-ui/icons/AllInboxOutlined';
 import AccountIcon from '@material-ui/icons/AccountCircleOutlined';
 import MessageIcon from '@material-ui/icons/MessageOutlined';
 import LogoutIcon from '@material-ui/icons/ExitToAppOutlined';

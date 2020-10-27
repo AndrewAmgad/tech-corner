@@ -13,14 +13,24 @@ import {
     CircularProgress
 } from '@material-ui/core';
 import signInStyles from './styles/styles';
-import { withRouter } from 'react-router';
+import { withRouter, RouteComponentProps } from 'react-router';
 
 import Logo from '../../components/Logo';
 import Copyright from '../../setup/Copyright';
 
 import Input from '../../components/InputComponent';
 
-function SignIn(props: any) {
+interface Props extends RouteComponentProps {
+    checkAuthLoading: boolean,
+    button: boolean,
+    authLoading: boolean,
+    errorMessage: string,
+    onSubmit: () => void,
+    sendDataToParent: (inputData: any) => void,
+}
+
+
+function SignIn(props: Props) {
     const classes = signInStyles();
 
     // input references

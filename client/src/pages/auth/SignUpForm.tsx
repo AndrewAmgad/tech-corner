@@ -12,7 +12,7 @@ import {
   Typography,
   Container
 } from '@material-ui/core'
-import { withRouter } from 'react-router';
+import { withRouter, RouteComponentProps } from 'react-router';
 import Logo from '../../components/Logo';
 
 import Copyright from '../../setup/Copyright';
@@ -21,9 +21,19 @@ import Input from '../../components/InputComponent';
 // Component Styles
 import SignUpStyles from './styles/styles';
 
+interface Props extends RouteComponentProps {
+  checkAuthLoading: boolean,
+  citiesLoading: boolean,
+  submitButton: boolean,
+  authLoading: boolean,
+  errors: any,
+  cities: any,
+  onSubmit: () => void,
+  sendDataToParent: (inputData: any) => void,
+}
 
 
-function SignUp(props: any) {
+function SignUp(props: Props) {
   const classes = SignUpStyles();
 
   // Input References initalization

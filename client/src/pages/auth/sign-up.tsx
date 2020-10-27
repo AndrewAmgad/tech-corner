@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
+import { withRouter, RouteComponentProps } from 'react-router';
 import MetaTags from 'react-meta-tags';
 import { displaySnackBar } from '../../redux/actions/notifications';
 
@@ -38,9 +38,23 @@ const validatePassword = (password: string) => {
     if (!re.test(password)) return false
     else if (password.length < 8) return false
     else return true
-}
+};
 
-function SignUp(props: any) {
+interface Props extends RouteComponentProps {
+    authLoading: boolean,
+    checkAuthLoading: boolean,
+    citiesLoading: boolean,
+    checkAuth: () => void,
+    signUp: (body: any) => void,
+    fetchCities: () => void,
+    displaySnackBar: (open: boolean, message: string, severity: string) => void,
+    checkAuthResponse: any,
+    authResponse: any,
+    citiesResponse: any,
+    responseError: any
+};
+
+function SignUp(props: Props) {
     const [inputs, setInputs] = useState<any>();
     const [errors, setErrors] = useState<any>({});
     const [submitButton, enableSubmitButton] = useState<boolean>(false);
@@ -89,24 +103,21 @@ function SignUp(props: any) {
 
     // Disable the Submit button if any of the inputs are empty or if there's an error
     useEffect(() => {
-        // if (!inputs) return;
-        // const { firstName, lastName, email, password, city, phone } = inputs;
+        if (!inputs) return;
+        const { firstName, lastName, email, password, city, phone } = inputs;
 
-        // let error = false;
+        let error = false;
 
-        // // Check each property of the errors object for errors
-        // for (let key in errors) {
-        //     if (errors.hasOwnProperty(key)) {
-        //         if (errors[key]) error = true
-        //     }
-        // }
+        // Check each property of the errors object for errors
+        for (let key in errors) {
+            if (errors.hasOwnProperty(key)) {
+                if (errors[key]) error = true
+            }
+        }
 
-        // // Check if all inputs are filled before enabling the button
-        // if (firstName && lastName && email && password && city !== 'none' && phone && !error) return enableSubmitButton(true);
-        // else return enableSubmitButton(false);
-
-        enableSubmitButton(true);
-
+        // Check if all inputs are filled before enabling the button
+        if (firstName && lastName && email && password && city !== 'none' && phone && !error) return enableSubmitButton(true);
+        else return enableSubmitButton(false);
     }, [errors, inputs])
 
     // Handle API resposne and errors
@@ -137,7 +148,6 @@ function SignUp(props: any) {
                 errors={errors}
                 onSubmit={onSubmit}
                 submitButton={submitButton}
-                authResponse={props.authResponse}
                 authLoading={props.authLoading}
                 citiesLoading={props.citiesLoading}
                 checkAuthLoading={props.checkAuthLoading}

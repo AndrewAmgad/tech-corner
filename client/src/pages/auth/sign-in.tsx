@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import SignInComponent from './SignInForm';
 import { connect } from 'react-redux';
 import { signIn } from '../../redux/actions/auth';
-import { withRouter } from 'react-router';
+import { withRouter, RouteComponentProps } from 'react-router';
 import MetaTags from 'react-meta-tags';
 import { displaySnackBar } from '../../redux/actions/notifications';
 
@@ -12,9 +12,20 @@ const PageMetaTags = () => (
         <meta name="description" content="Log into Tech Corner" />
         <meta property="og:title" content="Tech Corner - Sign In" />
     </MetaTags>
-)
+);
 
-function SignIn(props: any) {
+interface Props extends RouteComponentProps {
+    checkAuthResponse: any,
+    authResponse: any,
+    authLoading: boolean,
+    checkAuthLoading: boolean,
+    signIn: (email: string, password: string) => void,
+    checkAuth: () => void,
+    displaySnackBar: (open: boolean, message: string, severity: string) => void,
+    error: any,
+};
+
+function SignIn(props: Props) {
     const [inputs, setInputs] = useState<any>({});
     const [error, setError] = useState<string|null>(null);
     const [button, enableButton] = useState<boolean>(false)
@@ -65,7 +76,7 @@ function SignIn(props: any) {
             <SignInComponent
                 sendDataToParent={getInputData}
                 onSubmit={onSubmit}
-                errorMessage={error}
+                errorMessage={error as string}
                 button={button}
                 authLoading={props.authLoading}
                 checkAuthLoading={props.checkAuthLoading}

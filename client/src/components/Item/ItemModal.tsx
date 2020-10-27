@@ -1,4 +1,4 @@
-import React, { SyntheticEvent } from 'react';
+import React from 'react';
 import Modal from '../Modal'
 import Item from '../../types/Item';
 import Carousel from 'react-material-ui-carousel'
